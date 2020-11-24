@@ -1,0 +1,25 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Customized AI Karaoke</title>
+        <link rel="stylesheet" href="style.css" />
+        <script src="detectNote.js" defer></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <h1>❶ Please input your highest note</h1>
+            <div id="detector" class="vague">
+                <div class="pitch"><span id="pitch">-</span>Hz</div>
+                <div class="note"><span id="note">-</span></div>
+                <div class="highest">
+                    Your highest note is <span id="highest">-</span>
+                </div>
+            </div>
+            <button onclick="toggleLiveInput()" id="input-button">Start</button>
+            <button onclick="submitUserNote()" id="submit-button">
+                Submit
+            </button>
+        </div>
+    </body>
+</html>
