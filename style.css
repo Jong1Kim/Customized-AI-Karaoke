@@ -74,6 +74,17 @@ button:focus {
     width: 200px;
 }
 
+@media screen and (max-width: 768px) {
+    #detector {
+        width: 90%;
+    }
+
+    #input-button,
+    #submit-button {
+        width: 45%;
+    }
+}
+
 /* youtube page */
 
 #input {
