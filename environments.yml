@@ -17,5 +17,5 @@ dependencies:
   - librosa==0.8.0
   - pytest
   - pytest-xdist
-  - pytorch
   - torchvision
+  - tensorflow
