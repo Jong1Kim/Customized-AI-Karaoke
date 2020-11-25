@@ -30,18 +30,13 @@ def main(argv):
 
     :param argv: Provided command line arguments.
     """
+    from .commands.separate import entrypoint
     try:
         parser = create_argument_parser()
         arguments = parser.parse_args(argv[1:])
         enable_logging()
         if arguments.verbose:
             enable_tensorflow_logging()
-        if arguments.command == 'separate':
-            from .commands.separate import entrypoint
-        elif arguments.command == 'train':
-            from .commands.train import entrypoint
-        elif arguments.command == 'evaluate':
-            from .commands.evaluate import entrypoint
         params = load_configuration(arguments.configuration)
         entrypoint(arguments, params)
     except SpleeterError as e:
