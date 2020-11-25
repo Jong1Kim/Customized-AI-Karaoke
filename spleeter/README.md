@@ -3,6 +3,10 @@
 - U-net & Bi-directional LSTM
 - https://github.com/deezer/spleeter
 
+## conda environment setting
+```
+conda create -f environments.yml
+```
 
 ##
 ## Reference
