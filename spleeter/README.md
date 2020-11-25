@@ -1,6 +1,7 @@
 ## Accompaniment seperating model
-### Use spleeter model (https://github.com/deezer/spleeter)
-##### U-net & Bi-directional LSTM
+### Use spleeter model
+- U-net & Bi-directional LSTM
+- https://github.com/deezer/spleeter
 
 
 ##
