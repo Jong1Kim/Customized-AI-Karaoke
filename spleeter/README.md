@@ -8,8 +8,9 @@
 conda env create -f environments.yml
 conda activate caik
 # execute in main dir
-python -m spleeter separate -i input.mp3
+python -m spleeter -i input.mp3
 ```
+-i input_file_name.extension -o output_dir -p configuration
 
 ##
 ## Reference
