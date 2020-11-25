@@ -6,6 +6,7 @@
 ### Conda environment setting
 ```
 conda env create -f environments.yml
+python -m spleeter separate -i 인사.mp3 -p spleeter:2stems -o output
 ```
 
 ##
