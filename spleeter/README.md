@@ -1,6 +1,6 @@
 ## Accompaniment seperating model
 ### Use spleeter model
-- U-net & Bi-directional LSTM
+- U-net
 - https://github.com/deezer/spleeter
 
 ### Conda environment setting
