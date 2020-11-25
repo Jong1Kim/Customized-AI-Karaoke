@@ -27,21 +27,11 @@ def entrypoint(arguments, params):
     :param params: Deserialized JSON configuration file provided in CLI args.
     """
     # TODO: check with output naming.
-    audio_adapter = get_audio_adapter(arguments.audio_adapter)
     separator = Separator(
-        arguments.configuration,
-        MWF=arguments.MWF,
-        stft_backend=arguments.stft_backend)
+        arguments.configuration,)
     for filename in arguments.inputs:
         separator.separate_to_file(
             filename,
             arguments.output_path,
-            audio_adapter=audio_adapter,
-            offset=arguments.offset,
-            duration=arguments.duration,
-            codec=arguments.codec,
-            bitrate=arguments.bitrate,
-            filename_format=arguments.filename_format,
-            synchronous=False
         )
     separator.join()

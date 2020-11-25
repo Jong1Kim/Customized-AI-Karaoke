@@ -35,8 +35,6 @@ def main(argv):
         parser = create_argument_parser()
         arguments = parser.parse_args(argv[1:])
         enable_logging()
-        if arguments.verbose:
-            enable_tensorflow_logging()
         params = load_configuration(arguments.configuration)
         entrypoint(arguments, params)
     except SpleeterError as e:
