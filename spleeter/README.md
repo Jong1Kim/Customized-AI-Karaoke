@@ -5,7 +5,7 @@
 
 ## conda environment setting
 ```
-conda create -f environments.yml
+conda env create -f environments.yml
 ```
 
 ##
