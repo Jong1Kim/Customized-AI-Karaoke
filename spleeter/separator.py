@@ -71,8 +71,8 @@ def get_backend(backend: str) -> str:
     if backend not in SUPPORTED_BACKEND:
         raise ValueError(f'Unsupported backend {backend}')
     if backend == 'auto':
-        if len(tf.config.list_physical_devices('GPU')):
-            return 'tensorflow'
+        # if len(tf.config.list_physical_devices('GPU')):
+        #     return 'tensorflow'
         return 'librosa'
     return backend
 
