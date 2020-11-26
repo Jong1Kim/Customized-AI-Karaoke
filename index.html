@@ -4,7 +4,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Customized AI Karaoke</title>
         <link rel="stylesheet" href="style.css" />
-        <script src="script.js" defer></script>
+        <script src="/scripts/detectLiveNote.js" defer></script>
     </head>
     <body>
         <div id="wrapper">
@@ -21,5 +21,13 @@
                 Submit
             </button>
         </div>
+        <script>
+           function submitUserNote() {
+                var param = highestElem.innerText;
+                if (param != '-') {
+                    window.location.href = '/pages/youtube.html?usernote=' + param;
+                }
+            } 
+        </script>
     </body>
 </html>

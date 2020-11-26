@@ -1,7 +1,4 @@
-// detect note
-
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
-
 var audioContext = null;
 var isPlaying = false;
 var sourceNode = null;
@@ -9,36 +6,18 @@ var analyser = null;
 var theBuffer = null;
 var mediaStreamSource = null;
 var highestNote = 0;
-var lastNotes = [null, null, null, null, null, null, null, null, null, null];
+var highestNoteString = '';
+var lastNoteStrings = [null, null, null, null, null, null, null, null, null, null];
 var detectorElem, pitchElem, noteElem, highestElem, inputButtonElem;
 
 window.onload = function () {
+    // get elements
     detectorElem = document.getElementById('detector');
     pitchElem = document.getElementById('pitch');
     noteElem = document.getElementById('note');
     highestElem = document.getElementById('highest');
     inputButtonElem = document.getElementById('input-button');
 };
-
-async function getUserMedia(dictionary) {
-    let stream = null;
-    try {
-        stream = await navigator.mediaDevices.getUserMedia(dictionary);
-        gotStream(stream);
-        inputButtonElem.innerText = 'Stop';
-        isPlaying = true;
-    } catch (e) {
-        alert('getUserMedia threw exception :' + e);
-    }
-}
-
-function gotStream(stream) {
-    mediaStreamSource = audioContext.createMediaStreamSource(stream);
-    analyser = audioContext.createAnalyser();
-    analyser.fftSize = 2048;
-    mediaStreamSource.connect(analyser);
-    updatePitch();
-}
 
 function toggleLiveInput() {
     if (isPlaying) {
@@ -68,32 +47,35 @@ function toggleLiveInput() {
     return;
 }
 
+async function getUserMedia(dictionary) {
+    let stream = null;
+    try {
+        stream = await navigator.mediaDevices.getUserMedia(dictionary);
+        gotStream(stream);
+        inputButtonElem.innerText = 'Stop';
+        isPlaying = true;
+    } catch (e) {
+        alert('getUserMedia threw exception :' + e);
+    }
+}
+
+function gotStream(stream) {
+    mediaStreamSource = audioContext.createMediaStreamSource(stream);
+    analyser = audioContext.createAnalyser();
+    analyser.fftSize = 2048;
+    mediaStreamSource.connect(analyser);
+    updatePitchLive();
+}
+
 var rafID = null;
 var tracks = null;
 var buflen = 2048;
 var buf = new Float32Array(buflen);
-var noteStrings = [
-    'C',
-    'C#',
-    'D',
-    'D#',
-    'E',
-    'F',
-    'F#',
-    'G',
-    'G#',
-    'A',
-    'A#',
-    'B',
-];
+var noteStrings = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
 function noteFromPitch(frequency) {
     var noteNum = 12 * (Math.log(frequency / 440) / Math.log(2));
     return Math.round(noteNum) + 69;
-}
-
-function frequencyFromNoteNumber(note) {
-    return 440 * Math.pow(2, (note - 69) / 12);
 }
 
 function autoCorrelate(buf, sampleRate) {
@@ -164,7 +146,7 @@ function octaveFromPitch(pitch) {
     return 0;
 }
 
-function updatePitch(time) {
+function updatePitchLive(time) {
     var cycles = new Array();
     analyser.getFloatTimeDomainData(buf);
     var ac = autoCorrelate(buf, audioContext.sampleRate);
@@ -180,69 +162,17 @@ function updatePitch(time) {
         var note = noteFromPitch(pitch);
         var noteString = noteStrings[note % 12] + octaveFromPitch(pitch);
         noteElem.innerHTML = noteString;
-        lastNotes.push(noteString);
-        lastNotes.shift();
+        lastNoteStrings.push(noteString);
+        lastNoteStrings.shift();
         var allEqual = (arr) => arr.every((v) => v === arr[0]);
 
-        if (note > highestNote && allEqual(lastNotes)) {
-            highestElem.innerText = noteString;
+        if (note > highestNote && allEqual(lastNoteStrings)) {
+            highestNoteString = noteString;
+            highestElem.innerText = highestNoteString;
             highestNote = note;
         }
     }
-
     if (!window.requestAnimationFrame)
         window.requestAnimationFrame = window.webkitRequestAnimationFrame;
-    rafID = window.requestAnimationFrame(updatePitch);
-}
-
-function submitUserNote() {
-    var param = highestElem.innerText;
-    if (param != '-') {
-        window.location.href = '/pages/youtube.html?usernote=' + param;
-    }
-}
-
-function submitYoutube() {
-    var currentUrl = new URL(window.location.href);
-    var usernote = currentUrl.searchParams.get('usernote');
-    var youtubeUrl = new URL(document.getElementById('input').value);
-    var youtubeID = youtubeUrl.searchParams.get('v');
-    var wrapper = document.getElementById('wrapper');
-
-    wrapper.innerHTML = `
-        <h1>❸ Please wait</h1>
-    `;
-
-    // <<<<<< 지우지 마세요! >>>>>>>
-    // get mp3 file link from youtube link
-    // async function getMP3() {
-    //     const response = await fetch(
-    //         `https://youtube-to-mp32.p.rapidapi.com/yt_to_mp3?video_id=${youtubeID}`,
-    //         {
-    //             method: 'GET',
-    //             headers: {
-    //                 'x-rapidapi-key':
-    //                     '76b3ab0246mshe435987951b0de0p106ccajsn5eadd7215507',
-    //                 'x-rapidapi-host': 'youtube-to-mp32.p.rapidapi.com',
-    //             },
-    //         }
-    //     );
-    //     const responseData = await response.json();
-    //     console.log(responseData);
-    //     wrapper.innerHTML += `
-    //         <div><img src="${responseData.Video_Thumbnail}" alt="${responseData.Title}"></div>
-    //         <a href="${responseData.Download_url}" id="downloadYT">Download MP3</a>
-    //     `;
-    //     var downloadEl = document.getElementById('downloadYT');
-    //     downloadEl.click();
-    // }
-    // getMP3();
-
-    // temporary code not to use api
-    wrapper.innerHTML += `
-        <div><img src="https://img.youtube.com/vi/2ZtHF0UJO3o/hqdefault.jpg" alt="적재-풍경"></div>
-        <a href="https://www.bensound.com/bensound-music/bensound-jazzyfrenchy.mp3" id="downloadYT">Download MP3</a>
-        `;
-    var downloadEl = document.getElementById('downloadYT');
-    downloadEl.click();
+    rafID = window.requestAnimationFrame(updatePitchLive);
 }
