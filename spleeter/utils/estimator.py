@@ -9,11 +9,8 @@ from os.path import join
 # pylint: disable=import-error
 import tensorflow as tf
 
-
 from ..model import model_fn
 from ..model.provider import get_default_model_provider
-
-
 
 def get_default_model_dir(model_dir):
     """
