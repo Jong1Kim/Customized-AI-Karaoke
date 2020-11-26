@@ -10,7 +10,7 @@ conda activate caik
 # execute in main dir
 python -m spleeter -i input.mp3
 ```
--i input_file_name.extension -o output_dir -p configuration
+-i input_file / -o output_dir / -p configuration
 
 ##
 ## Reference

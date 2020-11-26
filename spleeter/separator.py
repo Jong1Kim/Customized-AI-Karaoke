@@ -31,7 +31,7 @@ from . import SpleeterError
 from .audio.adapter import get_default_audio_adapter
 from .audio.convertor import to_stereo
 from .utils.configuration import load_configuration
-from .utils.estimator import create_estimator, get_default_model_dir
+from .utils.estimator import get_default_model_dir
 from .model import EstimatorSpecBuilder, InputProviderFactory
 
 __email__ = 'spleeter@deezer.com'
@@ -115,27 +115,6 @@ class Separator(object):
             self._session.close()
 
     def _get_prediction_generator(self):
-        """ Lazy loading access method for internal prediction generator
-        returned by the predict method of a tensorflow estimator.
-
-        :returns: generator of prediction.
-        """
-        if self._prediction_generator is None:
-            estimator = create_estimator(self._params, self._MWF)
-
-            def get_dataset():
-                return tf.data.Dataset.from_generator(
-                    self._data_generator,
-                    output_types={
-                        'waveform': tf.float32,
-                        'audio_id': tf.string},
-                    output_shapes={
-                        'waveform': (None, 2),
-                        'audio_id': ()})
-
-            self._prediction_generator = estimator.predict(
-                get_dataset,
-                yield_single_examples=False)
         return self._prediction_generator
 
     def join(self, timeout: int = 200) -> NoReturn:
